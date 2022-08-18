@@ -8,12 +8,12 @@ import FullScreenLoading from '../../components/ui/FullScreenLoading';
 
 const KidsPage: NextPage = () => {
 
-  const { products, isLoading } = useProducts('/products?gender=kids')
+  const { products, isLoading } = useProducts('/products?gender=kid')
 
   return (
     <ShopLayout title={'Teslo-Shop - Productos para Niños'} pageDescription={'Encuentra los mejores productos para niños de Teslo aquí'}>
-        <Typography variant='h1' component='h1'>Tienda</Typography>
-        <Typography variant='h2' sx={{ mb: 1 }}>Todos los productos para niños</Typography>
+        <Typography variant='h1' component='h1'>Niños</Typography>
+        <Typography variant='h2' sx={{ mb: 1 }}>Todos los productos para los más pequeños</Typography>
 
         {
           isLoading
