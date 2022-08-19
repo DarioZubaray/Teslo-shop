@@ -1,5 +1,5 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ShopLayout } from '../../components/layouts';
 import { ProductSlideshow, SizeSelector } from '../../components/products';
@@ -70,14 +70,60 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
-  const { slug } = params as { slug: string }
-  const product = await dbProducts.getProductBySLug( slug )
+//   const { slug = '' } = params as { slug: string }
+//   const product = await dbProducts.getProductBySLug( slug )
+
+//   if (!product) {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false
+//       }
+//     }
+//   }
+
+//   return {
+//     props: {
+//       product
+//     }, // will be passed to the page component as props
+//   }
+// }
+
+export const getStaticPaths: GetStaticPaths = async() => {
+
+  const slugs = await dbProducts.getAllProductSlugs();
+  const paths = slugs.map(({slug}) => ({
+    params: { slug },
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking',
+   }
+}
+
+// `getStaticPaths` requires using `getStaticProps`
+export const getStaticProps: GetStaticProps = async({ params }) => {
+
+  const { slug = '' } = params as { slug: string }
+  const product = await dbProducts.getProductBySLug( slug );
+
+  if( !product ) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+
   return {
     props: {
       product
-    }, // will be passed to the page component as props
+    },
+    revalidate: 60 * 60 * 24 // se valida cada 24hs 
   }
 }
 
