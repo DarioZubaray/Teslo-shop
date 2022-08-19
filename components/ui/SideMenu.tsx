@@ -1,11 +1,24 @@
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
+import { useContext } from "react"
+import { UiContext } from "../../context"
+import { useRouter } from "next/router"
 
 
 export const SideMenu = () => {
+
+    const { isMenuOpen, toggleSideMenu } = useContext(UiContext)
+    const router = useRouter()
+
+    const navigateTo = (url: string) => {
+        toggleSideMenu()
+        router.push(url)
+    }
+
   return (
     <Drawer
-        open={ false }
+        open={ isMenuOpen }
+        onClose={ toggleSideMenu }
         anchor='right'
         sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
     >
@@ -44,21 +57,21 @@ export const SideMenu = () => {
                 </ListItem>
 
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem button sx={{ display: { xs: '', sm: 'none' } }} onClick={() => navigateTo('/category/men') }>
                     <ListItemIcon>
                         <MaleOutlined/>
                     </ListItemIcon>
                     <ListItemText primary={'Hombres'} />
                 </ListItem>
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem button sx={{ display: { xs: '', sm: 'none' } }} onClick={() => navigateTo('/category/women')}>
                     <ListItemIcon>
                         <FemaleOutlined/>
                     </ListItemIcon>
                     <ListItemText primary={'Mujeres'} />
                 </ListItem>
 
-                <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+                <ListItem button sx={{ display: { xs: '', sm: 'none' } }} onClick={() => navigateTo('/category/kids')}>
                     <ListItemIcon>
                         <EscalatorWarningOutlined/>
                     </ListItemIcon>
