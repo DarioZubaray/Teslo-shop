@@ -15,7 +15,6 @@ export const SideMenu = () => {
     const onSearchTerm = () => {
         console.log("buscando:")
         if( searchTerm.trim().length === 0 ) return;
-        console.log({searchTerm})
 
         navigateTo(`/search/${ searchTerm }`)
     }
@@ -38,6 +37,7 @@ export const SideMenu = () => {
 
                 <ListItem>
                     <Input
+                        autoFocus
                         value={ searchTerm }
                         onChange={ (e) => setSearchTerm( e.target.value ) }
                         onKeyPress={ (e) => e.key === 'Enter' ? onSearchTerm() : null }

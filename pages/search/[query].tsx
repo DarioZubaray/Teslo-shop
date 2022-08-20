@@ -20,8 +20,8 @@ const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
         <Typography variant='h2' sx={{ mb: 1 }}>
             {
                 foundProducts
-                ? `Termino de buscado: ${ query }`
-                : 'Tal vez te interese'
+                ? `Termino de buscado: ${ query.toUpperCase() }`
+                : `No se encontro: ${ query.toUpperCase() }, Tal vez te interese:`
             }
         </Typography>
 
