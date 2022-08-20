@@ -44,3 +44,15 @@ export const getProductsByTerm = async( term: string ): Promise<IProduct[]> => {
     //return JSON.parse( JSON.stringify(products) )
     return products
 }
+
+export const getAllProducts = async(): Promise<IProduct[]> => {
+
+    await db.connect();
+    const products = await Product.find({})
+        .select('title images price inStock slug -_id')
+        .lean()
+
+    await db.disconnect();
+
+    return products
+}

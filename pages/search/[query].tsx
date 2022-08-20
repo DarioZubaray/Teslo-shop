@@ -7,15 +7,23 @@ import { dbProducts } from '../../database';
 import { IProduct } from '../../interfaces';
 
 interface Props {
-    products: IProduct[]
+    products: IProduct[],
+    foundProducts: boolean,
+    query: string
 }
 
-const SearchPage: NextPage<Props> = ({ products }) => {
+const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
 
   return (
     <ShopLayout title={'Teslo-Shop - Home'} pageDescription={'Encuentra los mejores productos de Teslo aquí'}>
         <Typography variant='h1' component='h1'>Buscar productos</Typography>
-        <Typography variant='h2' sx={{ mb: 1 }}>ABC --- 123</Typography>
+        <Typography variant='h2' sx={{ mb: 1 }}>
+            {
+                foundProducts
+                ? `Termino de buscado: ${ query }`
+                : 'Tal vez te interese'
+            }
+        </Typography>
 
          <ProductList products={ products } />
 
@@ -37,12 +45,17 @@ export const getServerSideProps: GetServerSideProps = async({ params }) => {
     }
 
     let products = await dbProducts.getProductsByTerm(query)
+    const foundProducts = products.length > 0
 
     // TODO: buscar otros productos
+    if (!foundProducts) {
+        products = await dbProducts.getAllProducts()
+    }
 
     return {
       props: {
-        products
+        products,
+        foundProducts, query
       }
     }
   }
