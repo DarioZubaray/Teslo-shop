@@ -25,11 +25,21 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     quantity: 1,
   })
 
+  const onAddProduct = () => {
+    console.log({tempCartProduct})
+  }
+
   const handleSelectedSize = (size: ISize) => {
-    console.log({size})
     setTempCartProduct((temp) => ({
       ...temp,
       size
+    }))
+  }
+
+  const onUpdatedQuantity = (amount: number) => {
+    setTempCartProduct((temp) => ({
+      ...temp,
+      quantity: temp.quantity + amount
     }))
   }
 
@@ -54,7 +64,13 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             {/* Cantidad */}
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
-              <ItemCounter />
+              
+              <ItemCounter
+                currentValue={ tempCartProduct.quantity }
+                updatedQuantity={ onUpdatedQuantity }
+                maxValue={ product.inStock }
+              />
+              
               <SizeSelector
                 sizes={ product.sizes }
                 selectedSize={ tempCartProduct.size }
@@ -67,7 +83,11 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             {
               (product.inStock > 0) 
               ? (
-                <Button color="secondary" className='circular-btn'>
+                <Button
+                  color="secondary"
+                  className='circular-btn'
+                  onClick={ onAddProduct }
+                >
                   {
                     tempCartProduct.size
                     ? 'Agregar al carrito'
@@ -79,8 +99,6 @@ const ProductPage: NextPage<Props> = ({ product }) => {
                 <Chip label="No hay disponibles" color="error" variant="outlined" />
               )
             }
-
-            {/* <Chip label="No hay disponibles" color="error" variant='outlined' /> */}
 
             {/* Descripción */}
             <Box sx={{ mt:3 }}>
