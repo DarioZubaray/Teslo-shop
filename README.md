@@ -28,3 +28,10 @@ Llamara:
 ```
 http://localhost:3000/api/seed
 ```
+
+### Postman Collection
+
+Puedes ver los endpoints disponibles importando el siguiente archivo de postman en 
+```
+./postman/TesloNext.postman_collection.json
+```
