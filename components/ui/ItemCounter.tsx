@@ -10,19 +10,21 @@ interface Props {
 }
 
 export const ItemCounter:FC<Props> = ({currentValue, updatedQuantity, maxValue}) => {
+
+  const onUpdatedQuantity = (amount: number) => {
+    if (maxValue <= currentValue && amount === 1) return;
+    if (currentValue === 1 && amount === -1) return;
+
+    updatedQuantity(amount);
+  }
+
   return (
     <Box display='flex' alignItems='center'>
-        <IconButton
-          onClick={ () => updatedQuantity(-1) }
-          sx={{ display: (currentValue > 1) ? 'flex ' : 'none'}}
-        >
+        <IconButton onClick={ () => onUpdatedQuantity(-1) } >
             <RemoveCircleOutline />
         </IconButton>
         <Typography sx={{ width: 40, textAlign:'center' }}> { currentValue } </Typography>
-        <IconButton
-          onClick={ () => updatedQuantity(1) }
-          sx={{ display: (maxValue >= currentValue) ? 'flex ' : 'none'}}
-        >
+        <IconButton onClick={ () => onUpdatedQuantity(1) } >
             <AddCircleOutline />
         </IconButton>
     </Box>
