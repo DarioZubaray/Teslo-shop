@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 
 import { ShopLayout } from '../../components/layouts';
@@ -7,12 +8,16 @@ import { ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui/ItemCounter';
 import { dbProducts } from '../../database';
 import { ICartProduct, IProduct, ISize } from '../../interfaces';
+import { CartContext } from '../../context';
 
 interface Props {
   product: IProduct
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+
+  const router = useRouter()
+  const { addProductToCart } = useContext(CartContext)
 
   const [ tempCartProduct, setTempCartProduct ] = useState<ICartProduct>({
     _id: product._id,
@@ -26,7 +31,11 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   })
 
   const onAddProduct = () => {
-    console.log({tempCartProduct})
+    if (!tempCartProduct.size) return;
+
+    addProductToCart(tempCartProduct)
+
+    router.push('/cart')
   }
 
   const handleSelectedSize = (size: ISize) => {

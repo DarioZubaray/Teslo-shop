@@ -3,7 +3,7 @@ import { CartState } from "./CartProvider"
 
 type CartActionType =
  | { type: '[Cart] - Load cart from storage', payload: ICartProduct[] }
- | { type: '[Cart] - Add product', payload: ICartProduct }
+ | { type: '[Cart] - Add product', payload: ICartProduct[] }
 
  export const cartReducer = ( state: CartState, action: CartActionType): CartState => {
 
@@ -11,11 +11,12 @@ type CartActionType =
         case '[Cart] - Load cart from storage':
             return {
                 ...state,
-                cart: action.payload
+                cart: [...action.payload]
             }
         case '[Cart] - Add product':
             return {
                 ...state,
+                cart: [...action.payload]
             }
         default:
             return state
