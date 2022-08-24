@@ -32,7 +32,7 @@ const validateToken = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
     }
 
     await db.connect()
-    const user = await User.findOne({ userId }).lean()
+    const user = await User.findById( userId ).lean()
     await db.disconnect()
 
     if ( !user ) {
