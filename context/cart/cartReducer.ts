@@ -22,6 +22,7 @@ type CartActionType =
         case '[Cart] - Load cart from storage':
             return {
                 ...state,
+                isLoaded: true,
                 cart: [...action.payload]
             }
         case '[Cart] - Add product':
