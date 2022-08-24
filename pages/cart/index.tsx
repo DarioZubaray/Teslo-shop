@@ -16,7 +16,7 @@ const CartPage = () => {
         }
     }, [isLoaded, cart, router]);
 
-    if ( isLoaded || cart.length === 0 ) {
+    if ( !isLoaded || cart.length === 0 ) {
         return (<></>)
     }
 

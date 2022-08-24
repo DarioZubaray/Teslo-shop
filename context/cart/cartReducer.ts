@@ -1,11 +1,13 @@
 import { ICartProduct } from "../../interfaces"
-import { CartState } from "./CartProvider"
+import { CartState, ShippingAddress } from "./CartProvider"
 
 type CartActionType =
  | { type: '[Cart] - Load cart from storage', payload: ICartProduct[] }
  | { type: '[Cart] - Add product', payload: ICartProduct[] }
  | { type: '[Cart] - Update cart product', payload: ICartProduct }
  | { type: '[Cart] - Remove cart product', payload: ICartProduct }
+ | { type: '[Cart] - Load address from cookies', payload: ShippingAddress }
+ | { type: '[Cart] - Update shipping address', payload: ShippingAddress }
  | {
      type: '[Cart] - Update order summary',
      payload: {
@@ -55,6 +57,12 @@ type CartActionType =
                 tax: action.payload.tax,
                 subtotal: action.payload.subtotal,
                 total: action.payload.total
+            }
+        case '[Cart] - Load address from cookies':
+        case '[Cart] - Update shipping address':
+            return {
+                ...state,
+                shippingAddress: action.payload
             }
         default:
             return state
