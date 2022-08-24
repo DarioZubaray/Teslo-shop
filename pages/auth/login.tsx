@@ -25,7 +25,7 @@ const LoginPage = () => {
         const { token, user } = data;
         console.log({ token, user });
     } catch (error) {
-        console.log('Error en lass credenciales. ', error)
+        console.log('Error en las credenciales. ', error)
         setShowError(true);
         setTimeout(() => {
             setShowError(false);
@@ -43,7 +43,7 @@ const LoginPage = () => {
                         {
                             showError && (
                             <Chip 
-                                label="No reconocemos ese usurio o contraseña"
+                                label="No reconocemos ese usuario o contraseña"
                                 color="error"
                                 icon={ <ErrorOutline/> }
                                 className="fadeIn"

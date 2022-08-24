@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import NextLink from 'next/link';
-import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from "react-hook-form";
 import { AuthLayout } from '../../components/layouts'
 import { validations } from '../../utils';
+import tesloApi from '../../api/tesloApi';
+import { ErrorOutline } from '@mui/icons-material';
 
 type FormData = {
     name: string,
@@ -12,9 +15,21 @@ type FormData = {
 
 const RegisterPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+    const [ showError, setShowError ] = useState(false);
 
-    const onRegisterUser = (data: FormData) => {
-        console.log({data})
+    const onRegisterUser = async ({ name, email, password }: FormData) => {
+        setShowError(false);
+    try {
+        const { data } = await tesloApi.post('/user/register', { name, email, password });
+        const { token, user } = data;
+        console.log({ token, user });
+    } catch (error) {
+        console.log('Error en las credenciales. ', error)
+        setShowError(true);
+        setTimeout(() => {
+            setShowError(false);
+        }, 3000)
+    }
       }
 
   return (
@@ -24,6 +39,16 @@ const RegisterPage = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Typography variant='h1' component="h1">Crear cuenta</Typography>
+                        {
+                            showError && (
+                                <Chip 
+                                    label="Algo salió mal..."
+                                    color="error"
+                                    icon={ <ErrorOutline/> }
+                                    className="fadeIn"
+                                />
+                            )
+                        }
                     </Grid>
 
                     <Grid item xs={12}>
@@ -34,7 +59,8 @@ const RegisterPage = () => {
                             fullWidth
                             {
                                 ...register('name', {
-                                    required: 'Este campo es requerido'
+                                    required: 'Este campo es requerido',
+                                    minLength: { value: 2, message: 'Tu nombre debe de ser de al menos 2 caracteres.'}
                                 })
                             }
                             error={ !!errors.name }
@@ -82,7 +108,7 @@ const RegisterPage = () => {
                             fullWidth
                             type="submit"
                         >
-                            Ingresar
+                            Registrarse
                         </Button>
                     </Grid>
 
