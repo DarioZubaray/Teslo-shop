@@ -20,6 +20,10 @@ export const isValidToken = (token: string): Promise<string> => {
         throw new Error('Hay semilla de JWT - Revisar variables de entornos')
     }
 
+    if ( token.length <= 10) {
+        return Promise.reject('jwt no es válido');
+    }
+
     return new Promise( (resolve, reject) => {
         try {
             jwt.verify(token, process.env.JWT_SECRET_SEED || '', (err, payload) => {
