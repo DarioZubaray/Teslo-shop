@@ -80,6 +80,7 @@ export const AuthProvider: FC = ({ children }) => {
     const logoutUser = () => {
         Cookies.remove('token');
         Cookies.remove('cart');
+        Cookies.remove('address')
 
         dispatch({ type: '[Auth] - Logout'});
         router.reload();
