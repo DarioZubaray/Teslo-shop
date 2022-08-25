@@ -25,6 +25,17 @@ export default NextAuth({
 
   ],
 
+  pages: {
+    signIn: '/auth, login',
+    newUser: '/auth/register'
+  },
+
+  session: {
+    maxAge: 2592000, // 30d
+    strategy: 'jwt',
+    updateAge: 86400,
+  },
+
   callbacks: {
     async jwt({ token, account, user }) {
       if ( account ) {
@@ -35,7 +46,7 @@ export default NextAuth({
             token.user = user;
             break;
           case 'oauth':
-            // TODO: verificar si existe en DB
+            token.user = await dbUsers.oAuthToDBUser(user?.email || '', user?.name || '')
             break;
         }
       }

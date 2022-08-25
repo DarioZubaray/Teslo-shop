@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { useRouter } from "next/router"
-import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
+import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 import { AuthContext, UiContext } from "../../context"
 
@@ -60,6 +60,13 @@ export const SideMenu = () => {
                         }
                     />
                 </ListItem>
+
+                {
+                    isLoggedIn && (
+                        <Typography sx={{ display: 'flex', justifyContent: 'center', mb: 3, mt: 3 }} variant="body1">
+                            ¡Hola { user?.name }!</Typography>
+                    )
+                }
 
                 {
                     isLoggedIn && (
