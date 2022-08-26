@@ -17,7 +17,6 @@ interface Props {
 }
 
 const OrderPage: NextPage<Props> = ({ order }) => {
-    console.log(order);
     const { _id, isPaid, numberOfItem, subtotal, tax, total, shippingAddress } = order;
     const { firstName, lastName, address, address2, city, zip, country, phone } = shippingAddress;
 
@@ -75,12 +74,10 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                                 total={ total }
                             />
 
-                            <Box sx={{ mt: 3 }}>
-                                {/* TODO */}
-                                <h1>Pagar</h1>
+                            <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
 
                                 {
-                                    isPaid && (
+                                    isPaid ? (
                                         <Chip 
                                             sx={{ my: 2 }}
                                             label="Orden ya fue pagada"
@@ -88,6 +85,8 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                                             color="success"
                                             icon={ <CreditScoreOutlined /> }
                                         />
+                                    ) : (
+                                        <h1>Pagar</h1>
                                     )
                                 }
                             </Box>
