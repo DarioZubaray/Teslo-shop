@@ -230,6 +230,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Order create new",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"_id\": \"63040df8a587fb19635cd7e6\",\n            \"image\": \"8529354-00-A_0_2000.jpg\",\n            \"price\": 30,\n            \"size\": \"M\",\n            \"slug\": \"kids_racing_stripe_tee\",\n            \"title\": \"Kids Racing Stripe Tee\",\n            \"gender\": \"kid\",\n            \"quantity\": 1\n        }\n    ],\n    \"shippingAddress\": {\n        \"firstName\": \"Alberto\",\n        \"lastName\": \"Fernandez\",\n        \"address\": \"Balcarse 50\",\n        \"address2\": \"\",\n        \"zip\": \"1419\",\n        \"city\": \"CABA\",\n        \"country\": \"Argentina\",\n        \"phone\": \"911\"\n    },\n    \"numberOfItem\": 4,\n    \"subtotal\": 110,\n    \"tax\": 16.5,\n    \"total\": 126.5,\n    \"isPaid\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
