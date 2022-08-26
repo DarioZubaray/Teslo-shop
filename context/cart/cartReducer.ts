@@ -1,13 +1,13 @@
-import { ICartProduct } from "../../interfaces"
-import { CartState, ShippingAddress } from "./CartProvider"
+import { ICartProduct, IShippingAddress } from "../../interfaces"
+import { CartState } from "./CartProvider"
 
 type CartActionType =
  | { type: '[Cart] - Load cart from storage', payload: ICartProduct[] }
  | { type: '[Cart] - Add product', payload: ICartProduct[] }
  | { type: '[Cart] - Update cart product', payload: ICartProduct }
  | { type: '[Cart] - Remove cart product', payload: ICartProduct }
- | { type: '[Cart] - Load address from cookies', payload: ShippingAddress }
- | { type: '[Cart] - Update shipping address', payload: ShippingAddress }
+ | { type: '[Cart] - Load address from cookies', payload: IShippingAddress }
+ | { type: '[Cart] - Update shipping address', payload: IShippingAddress }
  | {
      type: '[Cart] - Update order summary',
      payload: {

@@ -1,7 +1,7 @@
 import { FC, useEffect, useReducer } from 'react';
 import Cookie from 'js-cookie';
 import { CartContext, cartReducer } from '.';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IShippingAddress } from '../../interfaces';
 
 export interface CartState {
     isLoaded: boolean;
@@ -11,18 +11,7 @@ export interface CartState {
     tax: number;
     total: number;
 
-    shippingAddress: ShippingAddress;
-}
-
-export interface ShippingAddress {
-    firstName: string;
-    lastName: string;
-    address: string;
-    address2?: string;
-    zip: string;
-    city: string;
-    country: string;
-    phone: string;
+    shippingAddress: IShippingAddress;
 }
 
 export const CART_INITIAL_STATE: CartState = {
@@ -136,7 +125,7 @@ export const CartProvider: FC = ({ children }) => {
         })
     }
 
-    const updateAddress = ( address: ShippingAddress) => {
+    const updateAddress = ( address: IShippingAddress) => {
         Cookie.set('address', JSON.stringify(address));
 
         dispatch({ type: '[Cart] - Load address from cookies', payload: address });
