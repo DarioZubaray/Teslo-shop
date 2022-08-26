@@ -65,7 +65,7 @@ export const CartProvider: FC = ({ children }) => {
             numberOfItem: state.cart.reduce(( prev, current) => prev + current.quantity, 0),
             subtotal,
             tax: subtotal * taxRate,
-            total: subtotal + ( taxRate + 1 )
+            total: subtotal * ( taxRate + 1 )
         }
 
         dispatch({ type: '[Cart] - Update order summary', payload: orderSummary })
