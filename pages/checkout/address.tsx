@@ -1,8 +1,8 @@
-import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from "@mui/material"
-import Cookies from "js-cookie";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from "@mui/material"
 import { useForm } from "react-hook-form";
+import Cookies from "js-cookie";
 
 import { ShopLayout } from "../../components/layouts"
 import { CartContext } from "../../context";
@@ -28,7 +28,7 @@ const getAddressFromCookies = (): FormData => {
         address2: data?.address2,
         zip: data?.zip,
         city: data?.city,
-        country: data?.country,
+        country: data?.country || countries[1].code,
         phone: data?.phone,
     }
 }
@@ -36,9 +36,25 @@ const getAddressFromCookies = (): FormData => {
 const AddressPage = () => {
     const router = useRouter();
     const { updateAddress, shippingAddress } = useContext(CartContext);
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-        defaultValues: getAddressFromCookies()
+    const [defaultCountry, setDefaultCountry] = useState('');
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+        defaultValues: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            address2: '',
+            zip: '',
+            city: '',
+            country: '',
+            phone: '',
+        }
     });
+
+    useEffect(() => {
+        const addressFromCookies = getAddressFromCookies();
+        reset(addressFromCookies);
+        setDefaultCountry(addressFromCookies.country);
+    }, [reset, setDefaultCountry]);
 
     const onAddressCheckout = ( data: FormData ) => {
         updateAddress(data);
@@ -139,27 +155,29 @@ const AddressPage = () => {
                 
                 <Grid item xs={12} sm={ 6 }>
                     <FormControl fullWidth>
-                        <TextField
-                            select
-                            variant="filled"
-                            label="País"
-                            defaultValue={ shippingAddress.country }
-                            {
-                                ...register('country', {
-                                    required: 'Este campo es requerido'
-                                })
-                            }
-                            error={ !!errors.country }
-                        >
-                            {
-                                countries.map( country => (
-                                    <MenuItem
-                                        key={ country.code}
-                                        value={ country.code }
-                                    >{ country.name }</MenuItem>
-                                ))
-                            }
-                        </TextField>
+                        {
+                            !!defaultCountry && (
+                                <TextField
+                                    select
+                                    variant="filled"
+                                    fullWidth
+                                    label="País"
+                                    defaultValue={defaultCountry}
+                                    {...register("country", {
+                                        required: "El país es requerido",
+                                    })}
+                                    error={!!errors.country}
+                                    helperText={errors.country?.message}
+                                >
+                                    {
+                                        countries.map((country) => (
+                                            <MenuItem key={country.code} value={country.code}>
+                                                {country.name}
+                                            </MenuItem>
+                                        ))
+                                    }
+                                </TextField>
+                        )}
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={ 6 }>
