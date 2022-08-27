@@ -1,16 +1,28 @@
+import { useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-import { Box, Card, CardContent, Divider, Grid, Typography, Chip } from '@mui/material';
+import { Box, Card, CardContent, Divider, Grid, Typography, Chip, CircularProgress } from '@mui/material';
 import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
 
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CartList, OrderSummary } from '../../components/cart';
 import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces';
-import { Order } from '../../models';
 import { countries } from '../../utils';
+import tesloApi from '../../api/tesloApi';
+
+export type OrderResponseBody = {
+    id: string;
+    status:
+        | "COMPLETED"
+        | "SAVED"
+        | "APPROVED"
+        | "VOIDED"
+        | "PAYER_ACTION_REQUIRED";
+};
 
 interface Props {
     order: IOrder
@@ -19,6 +31,34 @@ interface Props {
 const OrderPage: NextPage<Props> = ({ order }) => {
     const { _id, isPaid, numberOfItem, subtotal, tax, total, shippingAddress } = order;
     const { firstName, lastName, address, address2, city, zip, country, phone } = shippingAddress;
+
+    const router = useRouter();
+    const [ isPaying, setIsPaying ] = useState(false);
+
+    const onOrderCompleted = async( details: OrderResponseBody ) => {
+        
+        if ( details.status !== 'COMPLETED' ) {
+            return alert('No hay pago en Paypal');
+        }
+
+        setIsPaying(true);
+
+        try {
+            
+            const { data } = await tesloApi.post('/orders/pay', {
+                transactionId: details.id,
+                orderId: order._id
+            });
+
+            router.reload();
+
+        } catch (error) {
+            setIsPaying(false);
+            console.log(error);
+            alert('Error');
+        }
+
+    }
 
     return (
         <ShopLayout title='Resumen de la orden' pageDescription={'Resumen de la orden'}>
@@ -77,33 +117,40 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                             <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
 
                                 {
-                                    isPaid ? (
-                                        <Chip 
-                                            sx={{ my: 2 }}
-                                            label="Orden ya fue pagada"
-                                            variant='outlined'
-                                            color="success"
-                                            icon={ <CreditScoreOutlined /> }
-                                        />
+                                    isPaying ? (
+                                        <Box display="flex" justifyContent="center" className="fadeIn">
+                                            <CircularProgress/>
+                                        </Box>
                                     ) : (
-                                        <PayPalButtons
-                                            createOrder={(data, actions) => {
-                                                return actions.order.create({
-                                                    purchase_units: [
-                                                        {
-                                                            amount: {
-                                                                value: `${ order.total }`,
+                                        isPaid ? (
+                                            <Chip 
+                                                sx={{ my: 2 }}
+                                                label="Orden ya fue pagada"
+                                                variant='outlined'
+                                                color="success"
+                                                icon={ <CreditScoreOutlined /> }
+                                            />
+                                        ) : (
+                                            <PayPalButtons
+                                                createOrder={(data, actions) => {
+                                                    return actions.order.create({
+                                                        purchase_units: [
+                                                            {
+                                                                amount: {
+                                                                    value: `${ order.total }`,
+                                                                },
                                                             },
-                                                        },
-                                                    ],
-                                                });
-                                            }}
-                                            onApprove={(data, actions) => {
-                                                return actions.order!.capture().then((details) => {
-                                                    console.log({details})
-                                                });
-                                            }}
-                                        />
+                                                        ],
+                                                    });
+                                                }}
+                                                onApprove={(data, actions) => {
+                                                    return actions.order!.capture().then((details) => {
+                                                        console.log({details});
+                                                        onOrderCompleted(details);
+                                                    });
+                                                }}
+                                            />
+                                        )
                                     )
                                 }
                             </Box>
