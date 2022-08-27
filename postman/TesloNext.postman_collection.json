@@ -259,6 +259,124 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Order - pay",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "transactionId",
+							"value": "7BA47069FL608734X",
+							"type": "text"
+						},
+						{
+							"key": "orderId",
+							"value": "630a5a7c07bb6679eedfdca9",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/orders/pay",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"orders",
+						"pay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paypal - get token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "AW-uXOse-ATxjT9GItCrZNsHxr6uDzndHqQ8pNUGLNP3k4P3hH2ckE2SHXUgTwTyOTWvagDxpqx0ydVF",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"api-m",
+						"sandbox",
+						"paypal",
+						"com"
+					],
+					"path": [
+						"v1",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paypal - check order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "A21AAJJfRHUvyCLLd8Hg-k2reuqRtIRV2-IeUn8JRv0XulBKYZ4JIjOFZ4Fujmu2SMLeTK3QY-2YOP1zHxoUtJv2vFtfyLiqA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.sandbox.paypal.com/v2/checkout/orders/7BA47069FL608734X",
+					"protocol": "https",
+					"host": [
+						"api",
+						"sandbox",
+						"paypal",
+						"com"
+					],
+					"path": [
+						"v2",
+						"checkout",
+						"orders",
+						"7BA47069FL608734X"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
