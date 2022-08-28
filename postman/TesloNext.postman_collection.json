@@ -377,6 +377,27 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Admin - Dashboard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/admin/dashboard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"admin",
+						"dashboard"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
