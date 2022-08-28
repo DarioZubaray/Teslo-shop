@@ -16,7 +16,6 @@ const DashboardPage = () => {
 
     useEffect(() => {
       const interval = setInterval(()=>{
-        console.log('Tick');
         setRefreshIn( refreshIn => refreshIn > 0 ? refreshIn - 1: 30 );
       }, 1000 );
     
