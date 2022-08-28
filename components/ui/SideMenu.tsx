@@ -1,7 +1,7 @@
 import { useContext, useState } from "react"
 import { useRouter } from "next/router"
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from "@mui/material"
-import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
+import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, DashboardOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 import { AuthContext, UiContext } from "../../context"
 
 
@@ -138,11 +138,14 @@ export const SideMenu = () => {
                             <Divider />
                             <ListSubheader>Admin Panel</ListSubheader>
 
-                            <ListItem button>
+                            <ListItem
+                                button
+                                onClick={() => navigateTo('/admin') }
+                            >
                                 <ListItemIcon>
-                                    <CategoryOutlined/>
+                                    <DashboardOutlined />
                                 </ListItemIcon>
-                                <ListItemText primary={'Productos'} />
+                                <ListItemText primary={'Dashboard'} />
                             </ListItem>
                             <ListItem button>
                                 <ListItemIcon>
