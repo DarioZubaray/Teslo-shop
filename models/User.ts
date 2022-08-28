@@ -8,7 +8,7 @@ const userSchema = new Schema({
     role: { 
         type: String, 
         enum: { 
-            values: ['admin', 'client'],
+            values: ['admin', 'client', 'super-user','SEO'],
             message: 'No es un role permitido',
             default: 'client',
             required: true
