@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { isValidObjectId } from 'mongoose';
 
-// import { v2 as cloudinary } from 'cloudinary';
-// cloudinary.config( process.env.CLOUDINARY_URL || '' );
+import { v2 as cloudinary } from 'cloudinary';
+cloudinary.config( process.env.CLOUDINARY_URL || '' );
 
 import { db } from '../../../database';
 import { IProduct } from '../../../interfaces/products';
@@ -41,15 +41,15 @@ const getProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     await db.disconnect();
 
-    // const updatedProducts = products.map( product => {
-    //     product.images = product.images.map( image => {
-    //         return image.includes('http') ? image : `${ process.env.HOST_NAME}products/${ image }`
-    //     });
+    const updatedProducts = products.map( product => {
+        product.images = product.images.map( image => {
+            return image.includes('http') ? image : `${ process.env.HOST_NAME}/products/${ image }`
+        });
 
-    //     return product;
-    // })
+        return product;
+    })
 
-    res.status(200).json( products );
+    res.status(200).json( updatedProducts );
 }
 
 
@@ -66,8 +66,6 @@ const updateProduct = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
     }
 
     // TODO: posiblemente tendremos un localhost:3000/products/asdasd.jpg
-
-
     try {
         await db.connect();
         const product = await Product.findById(_id);
@@ -83,7 +81,7 @@ const updateProduct = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
                 // Borrar de cloudinary
                 const [ fileId, extension ] = image.substring( image.lastIndexOf('/') + 1 ).split('.')
                 console.log({ image, fileId, extension });
-                // await cloudinary.uploader.destroy( fileId );
+                await cloudinary.uploader.destroy( fileId );
             }
         });
 

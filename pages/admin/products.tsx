@@ -1,7 +1,8 @@
-import { CategoryOutlined } from '@mui/icons-material'
-import { CardMedia, Grid } from '@mui/material'
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import NextLink from 'next/link';
 import useSWR from 'swr';
+import { AddOutlined, CategoryOutlined } from '@mui/icons-material'
+import { CardMedia, Grid, Link, Box, Button } from '@mui/material'
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 import { AdminLayout } from '../../components/layouts'
 import { IProduct } from '../../interfaces';
@@ -17,13 +18,26 @@ const columns:GridColDef[] = [
                         component='img'
                         alt={ row.title }
                         className='fadeIn'
-                        image={ `/products/${ row.img }`}
+                        image={ row.img }
                    />
                 </a>
             )
         }
     },
-    { field: 'title', headerName: 'Título', width: 250 },
+    {
+        field: 'title',
+        headerName: 'Título',
+        width: 250,
+        renderCell:({ row }: GridValueGetterParams) => {
+            return (
+                <NextLink href={`/admin/products/${ row.slug }`} passHref>
+                    <Link underline='always'>
+                        { row.title }
+                    </Link>
+                </NextLink>
+            )
+        }
+    },
     { field: 'gender', headerName: 'Género'},
     { field: 'type', headerName: 'Tipo'},
     { field: 'inStock', headerName: 'Inventario'},
@@ -46,6 +60,7 @@ const ProductsPage = () => {
         inStock: product.inStock,
         price: product.price,
         sizes: product.sizes.join(', '),
+        slug: product.slug,
     }));
 
   return (
@@ -54,6 +69,16 @@ const ProductsPage = () => {
         subTitle={'Mantenimiento de productos'}
         icon={ <CategoryOutlined /> }
     >
+        <Box display='flex' justifyContent='end' sx={{ mb: 2 }}>
+            <Button
+                startIcon={ <AddOutlined /> }
+                color="secondary"
+                href="/admin/products/new"
+            >
+                Crear Producto
+            </Button>
+        </Box>
+
          <Grid container className='fadeIn'>
             <Grid item xs={12} sx={{ height:650, width: '100%' }}>
                 <DataGrid 
