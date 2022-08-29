@@ -49,3 +49,11 @@ Puedes ver los endpoints disponibles importando el siguiente archivo de postman 
 ```
 ./postman/TesloNext.postman_collection.json
 ```
+
+### Enlaces
+
+ - [Paypal developer dashboard](https://developer.paypal.com/home/)
+
+ - [Cloudinary](https://cloudinary.com/)
+
+ - [heroku](https://www.heroku.com/)
